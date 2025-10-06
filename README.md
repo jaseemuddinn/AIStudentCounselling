@@ -244,9 +244,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License.
 
-## 🆘 Support
-
-For support, email support@example.com or create an issue in the repository.
 
 ## 🙏 Acknowledgments
 
