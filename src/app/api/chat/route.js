@@ -8,6 +8,7 @@ import AcademicInfo from '@/models/AcademicInfo';
 import CareerProfile from '@/models/CareerProfile';
 import Goal from '@/models/Goal';
 import { getAIService } from '@/lib/ai/ai-service';
+import { generateMessageEmbedding, updateConversationEmbedding } from '@/lib/ai/embedding-utils';
 
 export async function POST(request) {
     try {
@@ -138,6 +139,8 @@ export async function POST(request) {
             conversationHistory: formattedHistory,
             studentContext,
             messageCount: conversationHistory.length,
+            userId, // Pass userId for RAG retrieval
+            enableRAG: true, // Enable RAG-enhanced responses
             options: {
                 temperature: 0.7,
                 maxTokens: 1000,
@@ -155,6 +158,46 @@ export async function POST(request) {
             content: aiResponse.content,
             sentiment: sentiment,
         });
+
+        // Generate embeddings for new messages (async, don't block response)
+        if (process.env.OPENAI_API_KEY) {
+            Promise.all([
+                generateMessageEmbedding(userMessage).then(embedding => {
+                    if (embedding) {
+                        userMessage.embedding = embedding;
+                        return userMessage.save().then(() => {
+                            console.log('✅ User message embedding saved');
+                        });
+                    } else {
+                        console.log('⚠️ User message embedding generation returned null');
+                    }
+                }),
+                generateMessageEmbedding(assistantMessage).then(embedding => {
+                    if (embedding) {
+                        assistantMessage.embedding = embedding;
+                        return assistantMessage.save().then(() => {
+                            console.log('✅ Assistant message embedding saved');
+                        });
+                    } else {
+                        console.log('⚠️ Assistant message embedding generation returned null');
+                    }
+                }),
+            ]).then(() => {
+                // Update conversation embedding after messages are embedded
+                console.log('🔄 Updating conversation embedding...');
+                return updateConversationEmbedding(conversation._id).then(success => {
+                    if (success) {
+                        console.log('✅ Conversation embedding updated');
+                    } else {
+                        console.log('⚠️ Conversation embedding update failed');
+                    }
+                });
+            }).catch(err => {
+                console.error('❌ Background embedding generation error:', err);
+            });
+        } else {
+            console.log('⚠️ OPENAI_API_KEY not set - skipping automatic embedding generation');
+        }
 
         // Update conversation
         conversation.lastMessageAt = new Date();

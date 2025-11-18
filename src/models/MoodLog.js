@@ -33,6 +33,11 @@ const MoodLogSchema = new mongoose.Schema(
             default: '',
             maxlength: 100,
         },
+        // RAG field
+        embedding: {
+            type: [Number],
+            default: undefined,
+        },
     },
     {
         timestamps: true,

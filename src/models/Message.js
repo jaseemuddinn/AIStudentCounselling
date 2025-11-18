@@ -26,6 +26,11 @@ const MessageSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.Mixed,
             default: {},
         },
+        // RAG field
+        embedding: {
+            type: [Number],
+            default: undefined,
+        },
     },
     {
         timestamps: true,

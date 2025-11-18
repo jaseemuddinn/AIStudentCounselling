@@ -1,5 +1,6 @@
 import GeminiProvider from './gemini-provider';
 import OpenAIProvider from './openai-provider';
+import { getRAGService } from './rag-service';
 import {
     getCurrentProvider,
     AI_PROVIDERS,
@@ -12,7 +13,9 @@ import {
 class AIService {
     constructor() {
         this.provider = null;
+        this.ragService = null;
         this.initializeProvider();
+        this.initializeRAG();
     }
 
     initializeProvider() {
@@ -49,6 +52,22 @@ class AIService {
                     throw new Error('Both AI providers failed to initialize');
                 }
             }
+        }
+    }
+
+    initializeRAG() {
+        try {
+            // Only initialize RAG if OpenAI API key is available (required for embeddings)
+            if (process.env.OPENAI_API_KEY) {
+                this.ragService = getRAGService();
+                console.log('✅ RAG Service initialized');
+            } else {
+                console.log('⚠️  RAG Service disabled (OPENAI_API_KEY not set)');
+            }
+        } catch (error) {
+            console.error('Failed to initialize RAG service:', error.message);
+            console.log('⚠️  RAG Service disabled');
+            this.ragService = null;
         }
     }
 
@@ -244,6 +263,8 @@ class AIService {
         studentContext = {},
         options = {},
         messageCount = 0,
+        userId = null,
+        enableRAG = true, // Enable/disable RAG retrieval
     }) {
         try {
             // Check for crisis keywords
@@ -278,10 +299,35 @@ class AIService {
                 context = this.buildCompressedSummary(studentContext);
             }
 
-            // Build system message
+            // RAG: Retrieve relevant past context
+            let ragContext = '';
+            if (enableRAG && this.ragService && userId) {
+                try {
+                    const retrievedContext = await this.ragService.retrieveAllContext(
+                        message,
+                        userId,
+                        {
+                            topK: 2, // Get top 2 of each type
+                            minSimilarity: 0.7,
+                            includeConversations: true,
+                            includeMessages: true,
+                            includeMoodLogs: mode === CHAT_MODES.EMOTIONAL, // Only include mood logs for emotional support
+                        }
+                    );
+
+                    ragContext = this.ragService.formatContextForPrompt(retrievedContext);
+                } catch (ragError) {
+                    console.error('RAG retrieval error (continuing without RAG):', ragError);
+                    // Continue without RAG if retrieval fails
+                }
+            }
+
+            // Build system message with both static context and RAG context
             const systemMessage = {
                 role: 'system',
-                content: SYSTEM_PROMPTS[mode] + (context ? `\n\n${context}` : ''),
+                content: SYSTEM_PROMPTS[mode] +
+                    (context ? `\n\n${context}` : '') +
+                    (ragContext ? `\n\n${ragContext}` : ''),
             };
 
             // Build message array
@@ -291,8 +337,27 @@ class AIService {
                 { role: 'user', content: message },
             ];
 
-            // Get response from provider
-            const response = await this.provider.chat(messages, options);
+            // Get response from provider with automatic fallback
+            let response;
+            try {
+                response = await this.provider.chat(messages, options);
+            } catch (providerError) {
+                // If Gemini is overloaded and we have OpenAI available, fallback
+                if (providerError.isOverloaded && getCurrentProvider() === AI_PROVIDERS.GEMINI) {
+                    console.log('⚠️ Gemini overloaded, attempting fallback to OpenAI...');
+                    try {
+                        const OpenAIProvider = (await import('./openai-provider')).default;
+                        const openaiProvider = new OpenAIProvider();
+                        response = await openaiProvider.chat(messages, options);
+                        console.log('✅ Successfully used OpenAI fallback');
+                    } catch (fallbackError) {
+                        console.error('❌ OpenAI fallback also failed:', fallbackError.message);
+                        throw providerError; // Throw original error
+                    }
+                } else {
+                    throw providerError;
+                }
+            }
 
             return response;
         } catch (error) {

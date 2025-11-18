@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RAG Indexing Tool</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; margin-top: 0; }
+        button {
+            background: #4F46E5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover { background: #4338CA; }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .info { background: #E0E7FF; color: #3730A3; }
+        .success { background: #D1FAE5; color: #065F46; }
+        .error { background: #FEE2E2; color: #991B1B; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: #F9FAFB;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4F46E5;
+        }
+        .stat-label {
+            color: #6B7280;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 RAG Indexing Tool</h1>
+        <p>Generate embeddings for your conversations to enable AI memory across sessions.</p>
+        
+        <div style="margin: 20px 0;">
+            <button onclick="checkStats()">📊 Check Stats</button>
+            <button onclick="indexAll()">🚀 Index All Documents</button>
+            <button onclick="indexConversations()">💬 Index Conversations Only</button>
+        </div>
+
+        <div id="status"></div>
+        <div id="stats"></div>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = message;
+        }
+
+        async function checkStats() {
+            showStatus('🔍 Checking indexing stats...', 'info');
+            try {
+                const response = await fetch('/api/rag/stats');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.stats;
+                    document.getElementById('stats').innerHTML = `
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-value">${stats.conversationsIndexed}</div>
+                                <div class="stat-label">Conversations</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">${stats.messagesIndexed}</div>
+                                <div class="stat-label">Messages</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">${stats.moodLogsIndexed}</div>
+                                <div class="stat-label">Mood Logs</div>
+                            </div>
+                        </div>
+                    `;
+                    showStatus(`✅ Total indexed documents: ${stats.totalIndexed}`, 'success');
+                } else {
+                    showStatus('❌ Failed to fetch stats', 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function indexAll() {
+            if (!confirm('This will index all conversations, messages, and mood logs. Continue?')) {
+                return;
+            }
+
+            showStatus('🚀 Starting indexing... This may take a few minutes.', 'info');
+            const startTime = Date.now();
+
+            try {
+                const response = await fetch('/api/rag/index', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: 'all', limit: 1000 })
+                });
+
+                const data = await response.json();
+                const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+
+                if (data.success) {
+                    const results = data.results;
+                    showStatus(
+                        `✅ Indexing completed in ${duration}s!<br><br>` +
+                        `📚 Conversations: ${results.conversations.indexed} indexed, ${results.conversations.errors} errors<br>` +
+                        `💬 Messages: ${results.messages.indexed} indexed, ${results.messages.errors} errors<br>` +
+                        `😊 Mood Logs: ${results.moodLogs.indexed} indexed, ${results.moodLogs.errors} errors<br><br>` +
+                        `🎉 Total: ${data.total} documents indexed`,
+                        'success'
+                    );
+                    checkStats(); // Refresh stats
+                } else {
+                    showStatus(`❌ Indexing failed: ${data.error || data.details}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function indexConversations() {
+            if (!confirm('This will index conversations only. Continue?')) {
+                return;
+            }
+
+            showStatus('🚀 Indexing conversations...', 'info');
+
+            try {
+                const response = await fetch('/api/rag/index', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: 'conversations', limit: 1000 })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showStatus(
+                        `✅ Indexed ${data.results.conversations.indexed} conversations<br>` +
+                        `❌ Errors: ${data.results.conversations.errors}`,
+                        'success'
+                    );
+                    checkStats();
+                } else {
+                    showStatus(`❌ Failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-check stats on load
+        checkStats();
+    </script>
+</body>
+</html>

@@ -21,7 +21,6 @@ export const CHAT_MODES = {
 export const MODEL_CONFIG = {
     [AI_PROVIDERS.GEMINI]: {
         model: 'gemini-2.5-flash',
-        temperature: 0.7,
         maxTokens: 2048,
         topP: 0.95,
     },

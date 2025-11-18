@@ -12,40 +12,61 @@ class GeminiProvider {
     }
 
     async chat(messages, options = {}) {
-        try {
-            const model = this.genAI.getGenerativeModel({
-                model: options.model || this.config.model,
-            });
+        const maxRetries = 2;
+        let lastError;
 
-            // Convert messages to Gemini format
-            const geminiMessages = this.formatMessages(messages);
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                const model = this.genAI.getGenerativeModel({
+                    model: options.model || this.config.model,
+                });
 
-            const generationConfig = {
-                temperature: options.temperature || this.config.temperature,
-                topP: options.topP || this.config.topP,
-                maxOutputTokens: options.maxTokens || this.config.maxTokens,
-            };
+                // Convert messages to Gemini format
+                const geminiMessages = this.formatMessages(messages);
 
-            // Start chat session
-            const chat = model.startChat({
-                generationConfig,
-                history: geminiMessages.history,
-            });
+                const generationConfig = {
+                    temperature: options.temperature || this.config.temperature,
+                    topP: options.topP || this.config.topP,
+                    maxOutputTokens: options.maxTokens || this.config.maxTokens,
+                };
 
-            // Send the latest message
-            const result = await chat.sendMessage(geminiMessages.currentMessage);
-            const response = await result.response;
-            const text = response.text();
+                // Start chat session
+                const chat = model.startChat({
+                    generationConfig,
+                    history: geminiMessages.history,
+                });
 
-            return {
-                content: text,
-                role: 'assistant',
-                provider: AI_PROVIDERS.GEMINI,
-            };
-        } catch (error) {
-            console.error('Gemini API Error:', error);
-            throw new Error(`Gemini API Error: ${error.message}`);
+                // Send the latest message
+                const result = await chat.sendMessage(geminiMessages.currentMessage);
+                const response = await result.response;
+                const text = response.text();
+
+                return {
+                    content: text,
+                    role: 'assistant',
+                    provider: AI_PROVIDERS.GEMINI,
+                };
+            } catch (error) {
+                lastError = error;
+                const isOverloaded = error.message?.includes('503') || error.message?.includes('overloaded');
+
+                if (isOverloaded && attempt < maxRetries) {
+                    // Exponential backoff: wait 1s, then 2s
+                    const waitTime = Math.pow(2, attempt) * 1000;
+                    console.log(`⚠️ Gemini overloaded, retrying in ${waitTime}ms... (attempt ${attempt + 1}/${maxRetries})`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                    continue;
+                }
+
+                console.error('Gemini API Error:', error);
+                // Mark as overloaded for fallback logic
+                const err = new Error(`Gemini API Error: ${error.message}`);
+                err.isOverloaded = isOverloaded;
+                throw err;
+            }
         }
+
+        throw lastError;
     }
 
     formatMessages(messages) {

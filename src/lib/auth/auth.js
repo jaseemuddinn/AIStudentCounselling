@@ -94,7 +94,6 @@ export const authOptions = {
     },
     secret: process.env.NEXTAUTH_SECRET,
     debug: process.env.NODE_ENV === 'development',
-    // Required for NextAuth v5 in production (Vercel, Netlify, etc.)
     trustHost: true,
 };
 

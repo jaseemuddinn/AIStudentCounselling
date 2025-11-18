@@ -24,6 +24,15 @@ const ConversationSchema = new mongoose.Schema(
             type: Date,
             default: Date.now,
         },
+        // RAG fields
+        summary: {
+            type: String,
+            default: '',
+        },
+        embedding: {
+            type: [Number],
+            default: undefined,
+        },
     },
     {
         timestamps: true,
