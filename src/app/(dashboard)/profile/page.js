@@ -206,47 +206,51 @@ export default function ProfilePage() {
         }
     }; if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-600" strokeWidth={2.5} />
             </div>
         );
     }
 
     return (
-        <div className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             {/* Header */}
-            <div className="mb-8 flex justify-between items-center">
+            <div className="mb-10 flex justify-between items-start">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
-                    <p className="mt-2 text-gray-600">
+                    <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent tracking-tight">
+                        My Profile
+                    </h1>
+                    <p className="mt-3 text-neutral-600 text-lg font-medium">
                         View and manage your personal information
                     </p>
                 </div>
                 <Link
                     href="/profile/edit"
-                    className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="inline-flex items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:scale-105 transition-all duration-300 font-bold shadow-2xl hover:shadow-indigo-500/50"
                 >
-                    <Edit className="h-5 w-5 mr-2" />
+                    <Edit className="h-5 w-5 mr-2" strokeWidth={2.5} />
                     Edit Profile
                 </Link>
             </div>
 
             {/* Profile Card */}
-            <div className="bg-white shadow rounded-lg overflow-hidden mb-6">
+            <div className="backdrop-blur-xl bg-white/80 shadow-2xl rounded-3xl overflow-hidden mb-8 border border-white/20">
                 {/* Header Section */}
-                <div className="bg-gradient-to-r from-indigo-500 to-purple-600 h-32"></div>
-                <div className="px-6 pb-6">
-                    <div className="flex items-end -mt-16 mb-4">
-                        <div className="bg-white rounded-full p-2 shadow-lg">
-                            <div className="bg-indigo-100 rounded-full p-4">
-                                <User className="h-16 w-16 text-indigo-600" />
+                <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-40 relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/20"></div>
+                </div>
+                <div className="px-8 pb-8">
+                    <div className="flex items-end -mt-20 mb-6">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-2xl border-4 border-white">
+                            <div className="bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full p-6">
+                                <User className="h-20 w-20 text-white" strokeWidth={2.5} />
                             </div>
                         </div>
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900">{session?.user?.name}</h2>
-                        <p className="text-gray-600 flex items-center mt-1">
-                            <Mail className="h-4 w-4 mr-2" />
+                        <h2 className="text-4xl font-bold text-black">{session?.user?.name}</h2>
+                        <p className="text-neutral-600 flex items-center mt-2 text-lg font-semibold">
+                            <Mail className="h-5 w-5 mr-2" strokeWidth={2.5} />
                             {session?.user?.email}
                         </p>
                     </div>
@@ -257,49 +261,49 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Personal Information */}
                     {profile.personal && (
-                        <div className="bg-white shadow rounded-lg p-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                <User className="h-5 w-5 mr-2 text-indigo-600" />
+                        <div className="backdrop-blur-xl bg-white/80 shadow-2xl rounded-3xl p-8 border border-white/20 hover:-translate-y-1 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-black mb-6 flex items-center">
+                                <User className="h-7 w-7 mr-3 text-indigo-600" strokeWidth={2.5} />
                                 Personal Information
                             </h3>
-                            <div className="space-y-3">
+                            <div className="space-y-5">
                                 {profile.personal.dateOfBirth && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Date of Birth</p>
-                                        <p className="text-base text-gray-900">
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Date of Birth</p>
+                                        <p className="text-base text-black font-semibold">
                                             {new Date(profile.personal.dateOfBirth).toLocaleDateString()}
                                         </p>
                                     </div>
                                 )}
                                 {profile.personal.gender && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Gender</p>
-                                        <p className="text-base text-gray-900 capitalize">
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Gender</p>
+                                        <p className="text-base text-black font-semibold capitalize">
                                             {profile.personal.gender.replace('_', ' ')}
                                         </p>
                                     </div>
                                 )}
                                 {profile.personal.phone && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Phone</p>
-                                        <p className="text-base text-gray-900">{profile.personal.phone}</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Phone</p>
+                                        <p className="text-base text-black font-semibold">{profile.personal.phone}</p>
                                     </div>
                                 )}
                                 {profile.personal.location && (
                                     <div>
-                                        <p className="text-sm text-gray-500 flex items-center">
-                                            <MapPin className="h-4 w-4 mr-1" />
+                                        <p className="text-sm text-neutral-500 flex items-center font-bold mb-1">
+                                            <MapPin className="h-4 w-4 mr-1" strokeWidth={2.5} />
                                             Location
                                         </p>
-                                        <p className="text-base text-gray-900">
+                                        <p className="text-base text-black font-semibold">
                                             {profile.personal.location.city}, {profile.personal.location.country}
                                         </p>
                                     </div>
                                 )}
                                 {profile.personal.preferredLanguage && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Preferred Language</p>
-                                        <p className="text-base text-gray-900 capitalize">
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Preferred Language</p>
+                                        <p className="text-base text-black font-semibold capitalize">
                                             {profile.personal.preferredLanguage}
                                         </p>
                                     </div>
@@ -310,52 +314,52 @@ export default function ProfilePage() {
 
                     {/* Academic Information */}
                     {profile.academic && (
-                        <div className="bg-white shadow rounded-lg p-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                <GraduationCap className="h-5 w-5 mr-2 text-green-600" />
+                        <div className="backdrop-blur-xl bg-white/80 shadow-2xl rounded-3xl p-8 border border-white/20 hover:-translate-y-1 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-black mb-6 flex items-center">
+                                <GraduationCap className="h-7 w-7 mr-3 text-green-600" strokeWidth={2.5} />
                                 Academic Information
                             </h3>
-                            <div className="space-y-3">
+                            <div className="space-y-5">
                                 {profile.academic.currentEducationLevel && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Education Level</p>
-                                        <p className="text-base text-gray-900 capitalize">
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Education Level</p>
+                                        <p className="text-base text-black font-semibold capitalize">
                                             {profile.academic.currentEducationLevel.replace('_', ' ')}
                                         </p>
                                     </div>
                                 )}
                                 {profile.academic.institution && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Institution</p>
-                                        <p className="text-base text-gray-900">{profile.academic.institution}</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Institution</p>
+                                        <p className="text-base text-black font-semibold">{profile.academic.institution}</p>
                                     </div>
                                 )}
                                 {profile.academic.fieldOfStudy && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Field of Study</p>
-                                        <p className="text-base text-gray-900">{profile.academic.fieldOfStudy}</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Field of Study</p>
+                                        <p className="text-base text-black font-semibold">{profile.academic.fieldOfStudy}</p>
                                     </div>
                                 )}
                                 {profile.academic.yearOfStudy && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Year of Study</p>
-                                        <p className="text-base text-gray-900">{profile.academic.yearOfStudy}</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Year of Study</p>
+                                        <p className="text-base text-black font-semibold">{profile.academic.yearOfStudy}</p>
                                     </div>
                                 )}
                                 {profile.academic.gpa && (
                                     <div>
-                                        <p className="text-sm text-gray-500">GPA</p>
-                                        <p className="text-base text-gray-900">{profile.academic.gpa}</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">GPA</p>
+                                        <p className="text-base text-black font-semibold">{profile.academic.gpa}</p>
                                     </div>
                                 )}
                                 {profile.academic.subjects && profile.academic.subjects.length > 0 && (
                                     <div>
-                                        <p className="text-sm text-gray-500 mb-2">Subjects</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-3">Subjects</p>
                                         <div className="flex flex-wrap gap-2">
                                             {profile.academic.subjects.map((subject, index) => (
                                                 <span
                                                     key={index}
-                                                    className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
+                                                    className="px-4 py-2 bg-gradient-to-br from-green-500 to-emerald-500 text-white rounded-2xl text-sm font-bold shadow-lg"
                                                 >
                                                     {subject}
                                                 </span>
@@ -365,8 +369,8 @@ export default function ProfilePage() {
                                 )}
                                 {profile.academic.learningStyle && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Learning Style</p>
-                                        <p className="text-base text-gray-900 capitalize">
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Learning Style</p>
+                                        <p className="text-base text-black font-semibold capitalize">
                                             {profile.academic.learningStyle.replace('_', ' ')}
                                         </p>
                                     </div>
@@ -377,28 +381,28 @@ export default function ProfilePage() {
 
                     {/* Career Information */}
                     {profile.career && (
-                        <div className="bg-white shadow rounded-lg p-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                                <Briefcase className="h-5 w-5 mr-2 text-purple-600" />
+                        <div className="backdrop-blur-xl bg-white/80 shadow-2xl rounded-3xl p-8 border border-white/20 hover:-translate-y-1 transition-all duration-300">
+                            <h3 className="text-2xl font-bold text-black mb-6 flex items-center">
+                                <Briefcase className="h-7 w-7 mr-3 text-purple-600" strokeWidth={2.5} />
                                 Career Information
                             </h3>
-                            <div className="space-y-3">
+                            <div className="space-y-5">
                                 {profile.career.careerStage && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Career Stage</p>
-                                        <p className="text-base text-gray-900 capitalize">
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Career Stage</p>
+                                        <p className="text-base text-black font-semibold capitalize">
                                             {profile.career.careerStage.replace('_', ' ')}
                                         </p>
                                     </div>
                                 )}
                                 {profile.career.careerInterests && profile.career.careerInterests.length > 0 && (
                                     <div>
-                                        <p className="text-sm text-gray-500 mb-2">Career Interests</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-3">Career Interests</p>
                                         <div className="flex flex-wrap gap-2">
                                             {profile.career.careerInterests.map((interest, index) => (
                                                 <span
                                                     key={index}
-                                                    className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
+                                                    className="px-4 py-2 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-2xl text-sm font-bold shadow-lg"
                                                 >
                                                     {interest}
                                                 </span>
@@ -408,12 +412,12 @@ export default function ProfilePage() {
                                 )}
                                 {profile.career.skills && profile.career.skills.length > 0 && (
                                     <div>
-                                        <p className="text-sm text-gray-500 mb-2">Skills</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-3">Skills</p>
                                         <div className="flex flex-wrap gap-2">
                                             {profile.career.skills.map((skill, index) => (
                                                 <span
                                                     key={index}
-                                                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                                                    className="px-4 py-2 bg-gradient-to-br from-blue-500 to-cyan-500 text-white rounded-2xl text-sm font-bold shadow-lg"
                                                 >
                                                     {skill}
                                                 </span>
@@ -423,12 +427,12 @@ export default function ProfilePage() {
                                 )}
                                 {profile.career.industryPreferences && profile.career.industryPreferences.length > 0 && (
                                     <div>
-                                        <p className="text-sm text-gray-500 mb-2">Industry Preferences</p>
+                                        <p className="text-sm text-neutral-500 font-bold mb-3">Industry Preferences</p>
                                         <div className="flex flex-wrap gap-2">
                                             {profile.career.industryPreferences.map((industry, index) => (
                                                 <span
                                                     key={index}
-                                                    className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm"
+                                                    className="px-4 py-2 bg-gradient-to-br from-orange-500 to-yellow-500 text-white rounded-2xl text-sm font-bold shadow-lg"
                                                 >
                                                     {industry}
                                                 </span>
@@ -438,8 +442,8 @@ export default function ProfilePage() {
                                 )}
                                 {profile.career.workEnvironmentPreference && (
                                     <div>
-                                        <p className="text-sm text-gray-500">Work Environment</p>
-                                        <p className="text-base text-gray-900 capitalize">
+                                        <p className="text-sm text-neutral-500 font-bold mb-1">Work Environment</p>
+                                        <p className="text-base text-black font-semibold capitalize">
                                             {profile.career.workEnvironmentPreference}
                                         </p>
                                     </div>
@@ -450,46 +454,46 @@ export default function ProfilePage() {
 
                     {/* Goals */}
                     {profile.goals && profile.goals.length > 0 && (
-                        <div className="bg-white shadow rounded-lg p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                                    <Target className="h-5 w-5 mr-2 text-yellow-600" />
+                        <div className="backdrop-blur-xl bg-white/80 shadow-2xl rounded-3xl p-8 border border-white/20 hover:-translate-y-1 transition-all duration-300">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-2xl font-bold text-black flex items-center">
+                                    <Target className="h-7 w-7 mr-3 text-yellow-600" strokeWidth={2.5} />
                                     Goals ({profile.goals.length})
                                 </h3>
                                 <button
                                     onClick={() => setShowAddGoalModal(true)}
-                                    className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm"
+                                    className="inline-flex items-center px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:scale-105 transition-all duration-300 text-sm font-bold shadow-xl"
                                 >
-                                    <Plus className="h-4 w-4 mr-1" />
+                                    <Plus className="h-5 w-5 mr-2" strokeWidth={2.5} />
                                     Add Goal
                                 </button>
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 {profile.goals.slice(0, 3).map((goal, index) => (
                                     <div
                                         key={index}
                                         onClick={() => handleEditGoalClick(goal)}
-                                        className="border-l-4 border-indigo-500 cursor-pointer hover:bg-gray-50 -ml-2 pl-4 py-2 rounded-r transition-colors"
+                                        className="border-l-4 border-indigo-500 cursor-pointer hover:bg-white/60 bg-white/40 backdrop-blur-sm -ml-2 pl-6 py-4 rounded-r-2xl transition-all duration-300 hover:scale-[1.02] shadow-lg"
                                     >
                                         <div className="flex items-start justify-between">
                                             <div className="flex-1">
-                                                <p className="font-medium text-gray-900">{goal.title}</p>
+                                                <p className="font-bold text-black text-lg">{goal.title}</p>
                                                 {goal.description && (
-                                                    <p className="text-sm text-gray-600 mt-1 line-clamp-2">{goal.description}</p>
+                                                    <p className="text-sm text-neutral-600 mt-2 line-clamp-2 font-medium">{goal.description}</p>
                                                 )}
-                                                <div className="flex items-center gap-3 mt-2">
-                                                    <span className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full capitalize">
+                                                <div className="flex items-center gap-3 mt-3 flex-wrap">
+                                                    <span className="text-xs px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full capitalize font-bold shadow-md">
                                                         {goal.category}
                                                     </span>
                                                     {goal.targetDate && (
-                                                        <span className="text-xs text-gray-500 flex items-center">
-                                                            <Calendar className="h-3 w-3 mr-1" />
+                                                        <span className="text-xs text-neutral-600 flex items-center font-semibold">
+                                                            <Calendar className="h-4 w-4 mr-1" strokeWidth={2.5} />
                                                             {new Date(goal.targetDate).toLocaleDateString()}
                                                         </span>
                                                     )}
-                                                    <span className={`text-xs px-2 py-1 rounded-full capitalize ${goal.status === 'completed' ? 'bg-green-100 text-green-700' :
-                                                            goal.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
-                                                                'bg-gray-100 text-gray-700'
+                                                    <span className={`text-xs px-3 py-1.5 rounded-full capitalize font-bold shadow-md ${goal.status === 'completed' ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' :
+                                                        goal.status === 'in-progress' ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white' :
+                                                            'bg-neutral-200 text-neutral-700'
                                                         }`}>
                                                         {goal.status.replace('-', ' ')}
                                                     </span>
@@ -501,7 +505,7 @@ export default function ProfilePage() {
                                 {profile.goals.length > 3 && (
                                     <Link
                                         href="/goals"
-                                        className="text-sm text-indigo-600 hover:text-indigo-700 inline-block mt-2"
+                                        className="text-sm text-indigo-600 hover:text-indigo-700 inline-block mt-3 font-bold hover:scale-105 transition-transform"
                                     >
                                         View all {profile.goals.length} goals →
                                     </Link>
@@ -511,17 +515,17 @@ export default function ProfilePage() {
                     )}
                 </div>
             ) : (
-                <div className="bg-white shadow rounded-lg p-12 text-center">
-                    <User className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <div className="backdrop-blur-xl bg-white/80 shadow-2xl rounded-3xl p-16 text-center border border-white/20">
+                    <User className="h-20 w-20 text-neutral-300 mx-auto mb-6" strokeWidth={1.5} />
+                    <h3 className="text-2xl font-bold text-black mb-3">
                         Profile Not Complete
                     </h3>
-                    <p className="text-gray-600 mb-4">
+                    <p className="text-neutral-600 mb-6 text-lg font-medium">
                         Complete your onboarding to see your full profile information.
                     </p>
                     <Link
                         href="/onboarding"
-                        className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                        className="inline-flex items-center px-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:scale-105 transition-all duration-300 font-bold shadow-2xl hover:shadow-indigo-500/50"
                     >
                         Complete Onboarding
                     </Link>
@@ -530,24 +534,24 @@ export default function ProfilePage() {
 
             {/* Add Goal Modal */}
             {showAddGoalModal && (
-                <div className="fixed inset-0 text-black bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white border-gray-200 border rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-xl font-bold text-gray-900 flex items-center">
-                                <Target className="h-6 w-6 mr-2 text-indigo-600" />
+                <div className="fixed inset-0 text-black bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="backdrop-blur-2xl bg-white/95 border-2 border-white/30 rounded-3xl shadow-2xl max-w-md w-full p-8 animate-in fade-in zoom-in duration-200">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-2xl font-bold text-black flex items-center">
+                                <Target className="h-7 w-7 mr-3 text-indigo-600" strokeWidth={2.5} />
                                 Add New Goal
                             </h3>
                             <button
                                 onClick={() => setShowAddGoalModal(false)}
-                                className="text-gray-400 hover:text-gray-600"
+                                className="text-neutral-400 hover:text-neutral-600 hover:scale-110 transition-all"
                             >
-                                <X className="h-6 w-6" />
+                                <X className="h-7 w-7" strokeWidth={2.5} />
                             </button>
                         </div>
 
-                        <form onSubmit={handleAddGoal} className="space-y-4">
+                        <form onSubmit={handleAddGoal} className="space-y-5">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Goal Title *
                                 </label>
                                 <input
@@ -555,13 +559,13 @@ export default function ProfilePage() {
                                     value={newGoal.title}
                                     onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
                                     placeholder="e.g., Complete Machine Learning Course"
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Description (Optional)
                                 </label>
                                 <textarea
@@ -569,18 +573,18 @@ export default function ProfilePage() {
                                     onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                                     rows={3}
                                     placeholder="Describe your goal in more detail..."
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all resize-none"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Category *
                                 </label>
                                 <select
                                     value={newGoal.category}
                                     onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                     required
                                 >
                                     <option value="">Select category</option>
@@ -593,38 +597,38 @@ export default function ProfilePage() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Target Date (Optional)
                                 </label>
                                 <input
                                     type="date"
                                     value={newGoal.targetDate}
                                     onChange={(e) => setNewGoal({ ...newGoal, targetDate: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                 />
                             </div>
 
-                            <div className="flex gap-3 pt-4">
+                            <div className="flex gap-4 pt-6">
                                 <button
                                     type="button"
                                     onClick={() => setShowAddGoalModal(false)}
-                                    className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                                    className="flex-1 px-5 py-4 border-2 border-neutral-300 text-neutral-700 rounded-2xl hover:bg-neutral-50 hover:scale-105 transition-all font-bold"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={savingGoal || !newGoal.title || !newGoal.category}
-                                    className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                    className="flex-1 px-5 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:scale-105 transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-xl"
                                 >
                                     {savingGoal ? (
                                         <>
-                                            <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                            <Loader2 className="h-5 w-5 mr-2 animate-spin" strokeWidth={2.5} />
                                             Adding...
                                         </>
                                     ) : (
                                         <>
-                                            <Plus className="h-5 w-5 mr-2" />
+                                            <Plus className="h-5 w-5 mr-2" strokeWidth={2.5} />
                                             Add Goal
                                         </>
                                     )}
@@ -637,37 +641,37 @@ export default function ProfilePage() {
 
             {/* Edit Goal Modal */}
             {showEditGoalModal && selectedGoal && (
-                <div className="fixed inset-0 text-black bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white border-gray-200 border rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-xl font-bold text-gray-900 flex items-center">
-                                <Target className="h-6 w-6 mr-2 text-indigo-600" />
+                <div className="fixed inset-0 text-black bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="backdrop-blur-2xl bg-white/95 border-2 border-white/30 rounded-3xl shadow-2xl max-w-md w-full p-8 animate-in fade-in zoom-in duration-200">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-2xl font-bold text-black flex items-center">
+                                <Target className="h-7 w-7 mr-3 text-indigo-600" strokeWidth={2.5} />
                                 Edit Goal
                             </h3>
                             <button
                                 onClick={() => setShowEditGoalModal(false)}
-                                className="text-gray-400 hover:text-gray-600"
+                                className="text-neutral-400 hover:text-neutral-600 hover:scale-110 transition-all"
                             >
-                                <X className="h-6 w-6" />
+                                <X className="h-7 w-7" strokeWidth={2.5} />
                             </button>
                         </div>
 
-                        <form onSubmit={handleUpdateGoal} className="space-y-4">
+                        <form onSubmit={handleUpdateGoal} className="space-y-5">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Goal Title *
                                 </label>
                                 <input
                                     type="text"
                                     value={editGoal.title}
                                     onChange={(e) => setEditGoal({ ...editGoal, title: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Description
                                 </label>
                                 <textarea
@@ -675,18 +679,18 @@ export default function ProfilePage() {
                                     onChange={(e) => setEditGoal({ ...editGoal, description: e.target.value })}
                                     rows={3}
                                     placeholder="Describe your goal in more detail..."
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all resize-none"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Category *
                                 </label>
                                 <select
                                     value={editGoal.category}
                                     onChange={(e) => setEditGoal({ ...editGoal, category: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                     required
                                 >
                                     <option value="academic">Academic</option>
@@ -698,25 +702,25 @@ export default function ProfilePage() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Target Date
                                 </label>
                                 <input
                                     type="date"
                                     value={editGoal.targetDate}
                                     onChange={(e) => setEditGoal({ ...editGoal, targetDate: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Status
                                 </label>
                                 <select
                                     value={editGoal.status}
                                     onChange={(e) => setEditGoal({ ...editGoal, status: e.target.value })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                 >
                                     <option value="not-started">Not Started</option>
                                     <option value="in-progress">In Progress</option>
@@ -725,43 +729,43 @@ export default function ProfilePage() {
                                 </select>
                             </div>
 
-                            <div className="flex gap-3 pt-4">
+                            <div className="flex gap-4 pt-6">
                                 <button
                                     type="submit"
                                     disabled={savingGoal || !editGoal.title || !editGoal.category}
-                                    className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                    className="flex-1 px-5 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:scale-105 transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-xl"
                                 >
                                     {savingGoal ? (
                                         <>
-                                            <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                            <Loader2 className="h-5 w-5 mr-2 animate-spin" strokeWidth={2.5} />
                                             Updating...
                                         </>
                                     ) : (
                                         <>
-                                            <Edit className="h-5 w-5 mr-2" />
+                                            <Edit className="h-5 w-5 mr-2" strokeWidth={2.5} />
                                             Update
                                         </>
                                     )}
                                 </button>
                             </div>
 
-                            <div className="flex gap-3 pt-2 border-t border-gray-200">
+                            <div className="flex gap-4 pt-5 border-t-2 border-neutral-200">
                                 <button
                                     type="button"
                                     onClick={handleMarkAsCompleted}
                                     disabled={savingGoal || editGoal.status === 'completed'}
-                                    className="flex-1 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm"
+                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl hover:scale-105 transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm shadow-xl"
                                 >
-                                    <CheckCircle className="h-4 w-4 mr-2" />
+                                    <CheckCircle className="h-5 w-5 mr-2" strokeWidth={2.5} />
                                     Mark Complete
                                 </button>
                                 <button
                                     type="button"
                                     onClick={handleDeleteGoal}
                                     disabled={savingGoal}
-                                    className="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm"
+                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-2xl hover:scale-105 transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm shadow-xl"
                                 >
-                                    <Trash2 className="h-4 w-4 mr-2" />
+                                    <Trash2 className="h-5 w-5 mr-2" strokeWidth={2.5} />
                                     Delete
                                 </button>
                             </div>

@@ -31,24 +31,30 @@ export default function DashboardLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-neutral-50 via-white to-neutral-100">
+            {/* Animated Background Elements */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-20 right-[10%] w-[500px] h-[500px] bg-gradient-to-br from-blue-50 to-purple-50 rounded-full blur-3xl opacity-30 animate-pulse" />
+                <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-pink-50 to-orange-50 rounded-full blur-3xl opacity-20" />
+            </div>
+
             {/* Mobile sidebar */}
             <div
                 className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'
                     }`}
             >
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
-                <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white">
-                    <div className="flex items-center justify-between h-16 px-4 border-b">
-                        <div className="flex items-center space-x-2">
-                            <span className="text-2xl">🎓</span>
-                            <span className="text-lg font-bold text-gray-900">Counsellor</span>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+                <div className="fixed inset-y-0 left-0 flex w-72 flex-col backdrop-blur-2xl bg-white/90 border-r border-white/20 shadow-2xl">
+                    <div className="flex items-center justify-between h-20 px-6 border-b border-neutral-200/50">
+                        <div className="flex items-center space-x-3">
+                            <div className="text-3xl">🎓</div>
+                            <span className="text-xl font-bold bg-gradient-to-r from-black to-neutral-600 bg-clip-text text-transparent">Counsellor</span>
                         </div>
-                        <button onClick={() => setSidebarOpen(false)}>
-                            <X className="h-6 w-6 text-gray-500" />
+                        <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-xl hover:bg-neutral-100 transition-colors">
+                            <X className="h-6 w-6 text-neutral-600" />
                         </button>
                     </div>
-                    <nav className="flex-1 px-4 py-4 space-y-1">
+                    <nav className="flex-1 px-4 py-6 space-y-2">
                         {navigation.map((item) => {
                             const Icon = item.icon;
                             const isActive = pathname === item.href;
@@ -56,24 +62,24 @@ export default function DashboardLayout({ children }) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg ${isActive
-                                            ? 'bg-indigo-50 text-indigo-600'
-                                            : 'text-gray-700 hover:bg-gray-100'
+                                    className={`flex items-center px-5 py-4 text-sm font-semibold rounded-2xl transition-all duration-300 ${isActive
+                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/30'
+                                        : 'text-neutral-700 hover:bg-neutral-100 hover:translate-x-1'
                                         }`}
                                     onClick={() => setSidebarOpen(false)}
                                 >
-                                    <Icon className="mr-3 h-5 w-5" />
+                                    <Icon className="mr-4 h-5 w-5" strokeWidth={2} />
                                     {item.name}
                                 </Link>
                             );
                         })}
                     </nav>
-                    <div className="p-4 border-t">
+                    <div className="p-4 border-t border-neutral-200/50">
                         <button
                             onClick={() => signOut({ callbackUrl: '/login' })}
-                            className="flex items-center w-full px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg"
+                            className="flex items-center w-full px-5 py-4 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300"
                         >
-                            <LogOut className="mr-3 h-5 w-5" />
+                            <LogOut className="mr-4 h-5 w-5" strokeWidth={2} />
                             Sign Out
                         </button>
                     </div>
@@ -81,13 +87,13 @@ export default function DashboardLayout({ children }) {
             </div>
 
             {/* Desktop sidebar */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-                <div className="flex flex-col flex-1 bg-white border-r">
-                    <div className="flex items-center h-16 px-6 border-b">
-                        <span className="text-2xl">🎓</span>
-                        <span className="ml-2 text-lg font-bold text-gray-900">Counsellor</span>
+            <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col lg:z-40">
+                <div className="flex flex-col flex-1 backdrop-blur-2xl bg-white/80 border-r border-white/20 shadow-xl">
+                    <div className="flex items-center h-20 px-6 border-b border-neutral-200/50">
+                        <div className="text-3xl">🎓</div>
+                        <span className="ml-3 text-xl font-bold bg-gradient-to-r from-black to-neutral-600 bg-clip-text text-transparent">Counsellor</span>
                     </div>
-                    <nav className="flex-1 px-4 py-4 space-y-1">
+                    <nav className="flex-1 px-4 py-6 space-y-2">
                         {navigation.map((item) => {
                             const Icon = item.icon;
                             const isActive = pathname === item.href;
@@ -95,23 +101,23 @@ export default function DashboardLayout({ children }) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${isActive
-                                            ? 'bg-indigo-50 text-indigo-600'
-                                            : 'text-gray-700 hover:bg-gray-100'
+                                    className={`flex items-center px-5 py-4 text-sm font-semibold rounded-2xl transition-all duration-300 ${isActive
+                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg shadow-indigo-500/30 scale-105'
+                                        : 'text-neutral-700 hover:bg-neutral-100 hover:translate-x-1'
                                         }`}
                                 >
-                                    <Icon className="mr-3 h-5 w-5" />
+                                    <Icon className="mr-4 h-5 w-5" strokeWidth={2} />
                                     {item.name}
                                 </Link>
                             );
                         })}
                     </nav>
-                    <div className="p-4 border-t">
+                    <div className="p-4 border-t border-neutral-200/50">
                         <button
                             onClick={() => signOut({ callbackUrl: '/login' })}
-                            className="flex items-center w-full px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            className="flex items-center w-full px-5 py-4 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-2xl transition-all duration-300 hover:scale-105"
                         >
-                            <LogOut className="mr-3 h-5 w-5" />
+                            <LogOut className="mr-4 h-5 w-5" strokeWidth={2} />
                             Sign Out
                         </button>
                     </div>
@@ -119,23 +125,23 @@ export default function DashboardLayout({ children }) {
             </div>
 
             {/* Main content */}
-            <div className="lg:pl-64">
+            <div className="lg:pl-72">
                 {/* Top bar */}
-                <div className="sticky top-0 z-40 flex h-16 bg-white border-b lg:hidden">
+                <div className="sticky top-0 z-40 flex h-20 backdrop-blur-xl bg-white/70 border-b border-white/20 lg:hidden shadow-sm">
                     <button
                         onClick={() => setSidebarOpen(true)}
-                        className="px-4 text-gray-500 focus:outline-none"
+                        className="px-6 text-neutral-600 hover:text-black transition-colors"
                     >
-                        <Menu className="h-6 w-6" />
+                        <Menu className="h-6 w-6" strokeWidth={2} />
                     </button>
                     <div className="flex items-center flex-1 px-4">
-                        <span className="text-2xl">🎓</span>
-                        <span className="ml-2 text-lg font-bold text-gray-900">Counsellor</span>
+                        <div className="text-3xl">🎓</div>
+                        <span className="ml-3 text-xl font-bold bg-gradient-to-r from-black to-neutral-600 bg-clip-text text-transparent">Counsellor</span>
                     </div>
                 </div>
 
                 {/* Page content */}
-                <main className="flex-1">
+                <main className="flex-1 relative z-10">
                     {children}
                 </main>
             </div>

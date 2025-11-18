@@ -254,33 +254,35 @@ export default function EditProfilePage() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+            <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+                <Loader2 className="h-12 w-12 animate-spin text-indigo-600" strokeWidth={2.5} />
             </div>
         );
     }
 
     return (
-        <div className="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-black">
+        <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-black">
             {/* Header */}
-            <div className="mb-8">
+            <div className="mb-10">
                 <Link
                     href="/profile"
-                    className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-4"
+                    className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-6 font-bold text-lg hover:scale-105 transition-transform"
                 >
-                    <ArrowLeft className="h-5 w-5 mr-2" />
+                    <ArrowLeft className="h-6 w-6 mr-2" strokeWidth={2.5} />
                     Back to Profile
                 </Link>
-                <h1 className="text-3xl font-bold text-gray-900">Edit Profile</h1>
-                <p className="mt-2 text-gray-600">Update your personal information</p>
+                <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent tracking-tight">
+                    Edit Profile
+                </h1>
+                <p className="mt-3 text-neutral-600 text-lg font-medium">Update your personal information</p>
             </div>
 
             {/* Message */}
             {message.text && (
                 <div
-                    className={`mb-6 p-4 rounded-lg ${message.type === 'success'
-                            ? 'bg-green-50 text-green-800 border border-green-200'
-                            : 'bg-red-50 text-red-800 border border-red-200'
+                    className={`mb-8 p-6 rounded-3xl font-bold text-lg shadow-xl backdrop-blur-xl ${message.type === 'success'
+                        ? 'bg-green-500/10 text-green-700 border-2 border-green-500/30'
+                        : 'bg-red-500/10 text-red-700 border-2 border-red-500/30'
                         }`}
                 >
                     {message.text}
@@ -288,8 +290,8 @@ export default function EditProfilePage() {
             )}
 
             {/* Tabs */}
-            <div className="mb-6 border-b border-gray-200">
-                <nav className="-mb-px flex space-x-8">
+            <div className="mb-8 border-b-2 border-neutral-200">
+                <nav className="-mb-0.5 flex space-x-8">
                     {[
                         { id: 'personal', label: 'Personal Info' },
                         { id: 'academic', label: 'Academic Info' },
@@ -299,9 +301,9 @@ export default function EditProfilePage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`${activeTab === tab.id
-                                    ? 'border-indigo-500 text-indigo-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
+                                ? 'border-indigo-600 text-indigo-600'
+                                : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300'
+                                } whitespace-nowrap py-5 px-2 border-b-4 font-bold text-base transition-all hover:scale-105`}
                         >
                             {tab.label}
                         </button>
@@ -310,34 +312,34 @@ export default function EditProfilePage() {
             </div>
 
             {/* Tab Content */}
-            <div className="bg-white shadow rounded-lg p-6">
+            <div className="backdrop-blur-xl bg-white/80 shadow-2xl rounded-3xl p-8 border border-white/20">
                 {/* Personal Info Tab */}
                 {activeTab === 'personal' && (
                     <form onSubmit={handleSubmitPersonal(onSubmitPersonal)} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Date of Birth *
                                 </label>
                                 <input
                                     type="date"
                                     {...registerPersonal('dateOfBirth')}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                 />
                                 {errorsPersonal.dateOfBirth && (
-                                    <p className="mt-1 text-sm text-red-600">
+                                    <p className="mt-2 text-sm text-red-600 font-semibold">
                                         {errorsPersonal.dateOfBirth.message}
                                     </p>
                                 )}
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Gender *
                                 </label>
                                 <select
                                     {...registerPersonal('gender')}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    className="w-full px-5 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-medium shadow-sm transition-all"
                                 >
                                     <option value="">Select gender</option>
                                     <option value="male">Male</option>
@@ -346,14 +348,14 @@ export default function EditProfilePage() {
                                     <option value="prefer_not_to_say">Prefer not to say</option>
                                 </select>
                                 {errorsPersonal.gender && (
-                                    <p className="mt-1 text-sm text-red-600">
+                                    <p className="mt-2 text-sm text-red-600 font-semibold">
                                         {errorsPersonal.gender.message}
                                     </p>
                                 )}
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-bold text-black mb-2">
                                     Phone Number
                                 </label>
                                 <input

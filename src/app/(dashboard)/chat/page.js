@@ -10,28 +10,32 @@ const CHAT_MODES = {
         id: 'general',
         name: 'General',
         icon: MessageSquare,
-        color: 'bg-blue-500',
+        gradient: 'from-blue-500 to-cyan-500',
+        bgGradient: 'from-blue-500/10 to-cyan-500/10',
         description: 'General guidance and support'
     },
     ACADEMIC: {
         id: 'academic',
         name: 'Academic',
         icon: GraduationCap,
-        color: 'bg-green-500',
+        gradient: 'from-green-500 to-emerald-500',
+        bgGradient: 'from-green-500/10 to-emerald-500/10',
         description: 'Study tips and academic help'
     },
     CAREER: {
         id: 'career',
         name: 'Career',
         icon: Briefcase,
-        color: 'bg-purple-500',
+        gradient: 'from-purple-500 to-pink-500',
+        bgGradient: 'from-purple-500/10 to-pink-500/10',
         description: 'Career guidance and planning'
     },
     EMOTIONAL: {
         id: 'emotional',
         name: 'Emotional',
         icon: Heart,
-        color: 'bg-pink-500',
+        gradient: 'from-pink-500 to-rose-500',
+        bgGradient: 'from-pink-500/10 to-rose-500/10',
         description: 'Emotional support and wellness'
     },
 };
@@ -249,28 +253,30 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] bg-gray-50 text-black">
+        <div className="flex h-[calc(100vh)] text-black">
             {/* Sidebar - Conversations List */}
-            <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-                <div className="p-4 border-b border-gray-200">
+            <div className="w-80 backdrop-blur-xl bg-white/80 border-r border-white/20 flex flex-col shadow-xl">
+                <div className="p-5 border-b border-neutral-200/50">
                     <button
                         onClick={handleNewConversation}
-                        className="w-full flex items-center justify-center px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+                        className="w-full flex items-center justify-center px-5 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 font-bold hover:scale-105"
                     >
-                        <Plus className="h-5 w-5 mr-2" />
+                        <Plus className="h-5 w-5 mr-2" strokeWidth={2.5} />
                         New Conversation
                     </button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
                     {conversations.length === 0 ? (
-                        <div className="p-8 text-center">
-                            <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                            <p className="text-sm text-gray-500">No conversations yet</p>
-                            <p className="text-xs text-gray-400 mt-1">Start a new chat to begin</p>
+                        <div className="p-10 text-center">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-gradient-to-br from-neutral-100 to-neutral-200 mb-4">
+                                <MessageSquare className="h-8 w-8 text-neutral-400" strokeWidth={2} />
+                            </div>
+                            <p className="text-sm font-semibold text-neutral-600 mb-1">No conversations yet</p>
+                            <p className="text-xs text-neutral-400">Start a new chat to begin ✨</p>
                         </div>
                     ) : (
-                        <div className="divide-y divide-gray-100">
+                        <div className="p-3 space-y-2">
                             {conversations.map((conversation) => {
                                 const modeInfo = getModeInfo(conversation.mode);
                                 const Icon = modeInfo.icon;
@@ -279,28 +285,30 @@ export default function ChatPage() {
                                     <div
                                         key={conversation.id}
                                         onClick={() => handleSelectConversation(conversation)}
-                                        className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors group ${selectedConversation?.id === conversation.id ? 'bg-indigo-50' : ''
+                                        className={`p-4 cursor-pointer rounded-2xl transition-all duration-300 group relative overflow-hidden ${selectedConversation?.id === conversation.id
+                                            ? 'bg-gradient-to-br ' + modeInfo.bgGradient + ' border-2 border-white shadow-lg'
+                                            : 'bg-white/60 hover:bg-white border border-neutral-200/50 hover:shadow-lg'
                                             }`}
                                     >
-                                        <div className="flex items-start justify-between">
+                                        <div className="flex items-start justify-between relative z-10">
                                             <div className="flex-1 min-w-0">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <div className={`${modeInfo.color} p-1 rounded`}>
-                                                        <Icon className="h-3 w-3 text-white" />
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <div className={`bg-gradient-to-br ${modeInfo.gradient} p-1.5 rounded-xl shadow-md`}>
+                                                        <Icon className="h-3.5 w-3.5 text-white" strokeWidth={2} />
                                                     </div>
-                                                    <h3 className="text-sm font-medium text-gray-900 truncate">
+                                                    <h3 className="text-sm font-bold text-black truncate">
                                                         {conversation.title}
                                                     </h3>
                                                 </div>
-                                                <p className="text-xs text-gray-500 truncate">
+                                                <p className="text-xs text-neutral-500 font-medium">
                                                     {new Date(conversation.updatedAt).toLocaleDateString()}
                                                 </p>
                                             </div>
                                             <button
                                                 onClick={(e) => handleDeleteConversation(conversation.id, e)}
-                                                className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-600 transition-all p-1"
+                                                className="opacity-0 group-hover:opacity-100 text-neutral-400 hover:text-red-600 transition-all p-2 rounded-lg hover:bg-red-50"
                                             >
-                                                <Trash2 className="h-4 w-4" />
+                                                <Trash2 className="h-4 w-4" strokeWidth={2} />
                                             </button>
                                         </div>
                                     </div>
@@ -315,7 +323,7 @@ export default function ChatPage() {
             <div className="flex-1 flex flex-col">
                 {/* Chat Header */}
                 {(selectedConversation || messages.length > 0) && (
-                    <div className="bg-white border-b border-gray-200 px-6 py-4">
+                    <div className="backdrop-blur-xl bg-white/70 border-b border-white/20 px-8 py-5 shadow-sm">
                         <div className="flex items-center justify-between">
                             <div className="flex-1">
                                 <div className="flex items-center gap-3">
@@ -329,37 +337,37 @@ export default function ChatPage() {
                                                     if (e.key === 'Enter') handleSaveTitle();
                                                     if (e.key === 'Escape') handleCancelEditTitle();
                                                 }}
-                                                className="px-3 py-1 border border-indigo-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg font-semibold"
+                                                className="px-4 py-2 border-2 border-indigo-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-xl font-bold shadow-sm"
                                                 placeholder="Conversation title"
                                                 autoFocus
                                             />
                                             <button
                                                 onClick={handleSaveTitle}
-                                                className="p-1.5 text-green-600 hover:bg-green-50 rounded transition-colors"
+                                                className="p-2 text-green-600 hover:bg-green-50 rounded-xl transition-all shadow-sm hover:shadow-md"
                                                 title="Save (Enter)"
                                             >
-                                                <Check className="h-5 w-5" />
+                                                <Check className="h-5 w-5" strokeWidth={2.5} />
                                             </button>
                                             <button
                                                 onClick={handleCancelEditTitle}
-                                                className="p-1.5 text-gray-600 hover:bg-gray-50 rounded transition-colors"
+                                                className="p-2 text-neutral-600 hover:bg-neutral-100 rounded-xl transition-all"
                                                 title="Cancel (Esc)"
                                             >
-                                                <X className="h-5 w-5" />
+                                                <X className="h-5 w-5" strokeWidth={2.5} />
                                             </button>
                                         </div>
                                     ) : (
                                         <>
-                                            <h2 className="text-lg font-semibold text-gray-900">
+                                            <h2 className="text-2xl font-bold text-black">
                                                 {selectedConversation?.title || 'New Conversation'}
                                             </h2>
                                             {selectedConversation && (
                                                 <button
                                                     onClick={handleStartEditTitle}
-                                                    className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded transition-colors"
+                                                    className="p-2 text-neutral-400 hover:text-black hover:bg-neutral-100 rounded-xl transition-all"
                                                     title="Edit title"
                                                 >
-                                                    <Edit className="h-4 w-4" />
+                                                    <Edit className="h-4 w-4" strokeWidth={2} />
                                                 </button>
                                             )}
                                         </>
@@ -368,8 +376,8 @@ export default function ChatPage() {
                                         const modeInfo = getModeInfo(chatMode);
                                         const Icon = modeInfo.icon;
                                         return (
-                                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white ${modeInfo.color}`}>
-                                                <Icon className="h-3 w-3 mr-1" />
+                                            <span className={`inline-flex items-center px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r ${modeInfo.gradient} shadow-lg`}>
+                                                <Icon className="h-3.5 w-3.5 mr-1.5" strokeWidth={2.5} />
                                                 {modeInfo.name}
                                             </span>
                                         );
@@ -378,15 +386,15 @@ export default function ChatPage() {
                             </div>
                             <button
                                 onClick={() => setShowModeSelector(!showModeSelector)}
-                                className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                className="px-5 py-2.5 text-sm font-semibold border-2 border-neutral-300 rounded-xl hover:bg-neutral-100 hover:border-neutral-400 transition-all shadow-sm hover:shadow-md"
                             >
                                 Change Mode
                             </button>
                         </div>
                         {showModeSelector && (
-                            <div className="mt-4 pt-4 border-t border-gray-200">
-                                <p className="text-sm font-medium text-gray-700 mb-3">Switch to a different mode:</p>
-                                <div className="grid grid-cols-4 gap-2">
+                            <div className="mt-5 pt-5 border-t border-neutral-200/50">
+                                <p className="text-sm font-bold text-black mb-4">Switch to a different mode:</p>
+                                <div className="grid grid-cols-4 gap-3">
                                     {Object.values(CHAT_MODES).map((mode) => {
                                         const Icon = mode.icon;
                                         return (
@@ -396,15 +404,15 @@ export default function ChatPage() {
                                                     setChatMode(mode.id);
                                                     setShowModeSelector(false);
                                                 }}
-                                                className={`p-3 rounded-lg border transition-all ${chatMode === mode.id
-                                                    ? 'border-indigo-500 bg-indigo-50'
-                                                    : 'border-gray-200 hover:border-gray-300'
+                                                className={`p-4 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${chatMode === mode.id
+                                                    ? 'border-indigo-500 bg-gradient-to-br ' + mode.bgGradient + ' shadow-lg'
+                                                    : 'border-neutral-200 hover:border-neutral-300 bg-white/60'
                                                     }`}
                                             >
-                                                <div className={`${mode.color} w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-1`}>
-                                                    <Icon className="h-4 w-4 text-white" />
+                                                <div className={`bg-gradient-to-br ${mode.gradient} w-10 h-10 rounded-2xl flex items-center justify-center mx-auto mb-2 shadow-lg`}>
+                                                    <Icon className="h-5 w-5 text-white" strokeWidth={2} />
                                                 </div>
-                                                <p className="text-xs font-medium text-gray-900 text-center">{mode.name}</p>
+                                                <p className="text-xs font-bold text-black text-center">{mode.name}</p>
                                             </button>
                                         );
                                     })}
@@ -415,51 +423,49 @@ export default function ChatPage() {
                 )}
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                <div className="flex-1 overflow-y-auto p-8 space-y-5">
                     {!selectedConversation && messages.length === 0 ? (
                         <div className="h-full flex items-center justify-center">
-                            <div className="text-center max-w-md">
-                                <Sparkles className="h-16 w-16 text-indigo-500 mx-auto mb-4" />
-                                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                            <div className="text-center max-w-2xl">
+                                {/* <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-500 mb-6 shadow-2xl shadow-indigo-500/30">
+                                    <Sparkles className="h-8 w-8 text-white" strokeWidth={2} />
+                                </div> */}
+                                <h3 className="text-4xl font-bold bg-gradient-to-r from-black to-neutral-600 bg-clip-text text-transparent mb-4">
                                     Welcome to AI Counsellor
                                 </h3>
-                                <p className="text-gray-600 mb-4">
+                                <p className="text-lg text-neutral-600 font-medium mb-8 leading-relaxed">
                                     I'm here to help you with academic guidance, career planning,
-                                    emotional support, and general advice. Start a conversation to begin!
+                                    emotional support, and general advice. Start a conversation to begin! ✨
                                 </p>
-                                <div className="mb-4">
-                                    <p className="text-sm font-medium text-gray-700 mb-3">Choose a mode to get started:</p>
-                                    <div className="grid grid-cols-2 gap-3">
+                                <div className="mb-6">
+                                    <p className="text-sm font-bold text-black mb-5">Choose a mode to get started:</p>
+                                    <div className="grid grid-cols-2 gap-4">
                                         {Object.values(CHAT_MODES).map((mode) => {
                                             const Icon = mode.icon;
                                             return (
                                                 <button
                                                     key={mode.id}
                                                     onClick={() => setChatMode(mode.id)}
-                                                    className={`p-4 rounded-lg border-2 transition-all text-left ${chatMode === mode.id
-                                                        ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                                                        : 'border-gray-200 hover:border-gray-300'
+                                                    className={`p-4 rounded-2xl border-2 transition-all duration-300 text-left hover:scale-102 ${chatMode === mode.id
+                                                        ? 'border-indigo-500 bg-gradient-to-br ' + mode.bgGradient + ' shadow-xl'
+                                                        : 'border-neutral-200 hover:border-neutral-300 bg-white/60 shadow-lg'
                                                         }`}
                                                 >
-                                                    <div className={`${mode.color} w-10 h-10 rounded-lg flex items-center justify-center mb-2`}>
-                                                        <Icon className="h-5 w-5 text-white" />
+                                                    <div className={`bg-gradient-to-br ${mode.gradient} w-12 h-12 rounded-2xl flex items-center justify-center mb-3 shadow-lg`}>
+                                                        <Icon className="h-4 w-4 text-white" strokeWidth={2} />
                                                     </div>
-                                                    <h4 className="font-medium text-gray-900">{mode.name}</h4>
-                                                    <p className="text-xs text-gray-500 mt-1">{mode.description}</p>
+                                                    <h4 className="font-bold text-black text-lg">{mode.name}</h4>
+                                                    <p className="text-sm text-neutral-600 font-medium mt-2">{mode.description}</p>
                                                 </button>
                                             );
                                         })}
                                     </div>
                                 </div>
-                                <div className={`mt-4 p-3 rounded-lg ${chatMode === 'general' ? 'bg-blue-50 border-blue-200' :
-                                    chatMode === 'academic' ? 'bg-green-50 border-green-200' :
-                                        chatMode === 'career' ? 'bg-purple-50 border-purple-200' :
-                                            'bg-pink-50 border-pink-200'
-                                    } border`}>
-                                    <p className="text-sm text-gray-700">
-                                        <span className="font-semibold">Selected Mode:</span> {getModeInfo(chatMode).name}
+                                <div className={`mt-6 p-5 rounded-3xl bg-gradient-to-br ${getModeInfo(chatMode).bgGradient} border-2 border-white shadow-lg`}>
+                                    <p className="text-base text-black font-bold">
+                                        <span className="text-neutral-700">Selected Mode:</span> {getModeInfo(chatMode).name}
                                     </p>
-                                    <p className="text-xs text-gray-600 mt-1">
+                                    <p className="text-sm text-neutral-700 font-medium mt-2">
                                         💬 Your conversation history is preserved. I remember everything you share just like a good friend!
                                     </p>
                                 </div>
@@ -467,7 +473,10 @@ export default function ChatPage() {
                         </div>
                     ) : isLoading ? (
                         <div className="flex items-center justify-center h-full">
-                            <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+                            <div className="relative">
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-pulse"></div>
+                                <Loader2 className="absolute inset-0 m-auto h-8 w-8 animate-spin text-white" strokeWidth={3} />
+                            </div>
                         </div>
                     ) : (
                         <>
@@ -478,18 +487,18 @@ export default function ChatPage() {
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.2 }}
+                                        transition={{ duration: 0.3 }}
                                         className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                     >
                                         <div
-                                            className={`max-w-[70%] rounded-2xl px-4 py-3 ${message.role === 'user'
-                                                ? 'bg-indigo-600 text-white'
-                                                : 'bg-white border border-gray-200 text-gray-900'
+                                            className={`max-w-[75%] rounded-3xl px-6 py-4 shadow-lg ${message.role === 'user'
+                                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white'
+                                                : 'backdrop-blur-xl bg-white/90 border border-white/50 text-black shadow-xl'
                                                 }`}
                                         >
-                                            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                            <p className="text-base font-medium whitespace-pre-wrap leading-relaxed">{message.content}</p>
                                             <p
-                                                className={`text-xs mt-2 ${message.role === 'user' ? 'text-indigo-200' : 'text-gray-400'
+                                                className={`text-xs mt-3 font-semibold ${message.role === 'user' ? 'text-indigo-200' : 'text-neutral-400'
                                                     }`}
                                             >
                                                 {new Date(message.createdAt).toLocaleTimeString([], {
@@ -508,11 +517,11 @@ export default function ChatPage() {
                                     animate={{ opacity: 1, y: 0 }}
                                     className="flex justify-start"
                                 >
-                                    <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
+                                    <div className="backdrop-blur-xl bg-white/90 border border-white/50 rounded-3xl px-6 py-4 shadow-xl">
                                         <div className="flex space-x-2">
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                            <div className="w-2.5 h-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                            <div className="w-2.5 h-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                            <div className="w-2.5 h-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -523,26 +532,26 @@ export default function ChatPage() {
                 </div>
 
                 {/* Input Area */}
-                <div className="bg-white border-t border-gray-200 p-4">
-                    <form onSubmit={handleSendMessage} className="flex gap-3">
+                <div className="backdrop-blur-xl bg-white/70 border-t border-white/20 p-6 shadow-lg">
+                    <form onSubmit={handleSendMessage} className="flex gap-4">
                         <input
                             ref={inputRef}
                             type="text"
                             value={inputMessage}
                             onChange={(e) => setInputMessage(e.target.value)}
-                            placeholder={`Ask me anything about ${getModeInfo(chatMode).name.toLowerCase()}...`}
-                            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                            placeholder={`Ask me anything about ${getModeInfo(chatMode).name.toLowerCase()}... ✨`}
+                            className="flex-1 px-6 py-4 border-2 border-neutral-300 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-medium text-base shadow-sm"
                             disabled={isSending}
                         />
                         <button
                             type="submit"
                             disabled={!inputMessage.trim() || isSending}
-                            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                            className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl hover:shadow-2xl hover:shadow-indigo-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center font-bold hover:scale-105 disabled:hover:scale-100"
                         >
                             {isSending ? (
-                                <Loader2 className="h-5 w-5 animate-spin" />
+                                <Loader2 className="h-6 w-6 animate-spin" strokeWidth={2.5} />
                             ) : (
-                                <Send className="h-5 w-5" />
+                                <Send className="h-6 w-6" strokeWidth={2.5} />
                             )}
                         </button>
                     </form>
